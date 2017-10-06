@@ -29,10 +29,10 @@ defmodule AggRagerWeb.Coherence do
       import Plug.Conn
       import AggRagerWeb.Router.Helpers
       import AggRagerWeb.Gettext
-      import Coherence.ControllerHelpers
+      import Coherence.Controller
 
       alias Coherence.Config
-      alias Coherence.ControllerHelpers, as: Helpers
+      alias Coherence.Controller
 
       require Redirects
     end

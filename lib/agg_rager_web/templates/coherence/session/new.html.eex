@@ -33,5 +33,3 @@
   </div>
 
 <% end %>
-
-<%= oauth_links(@conn) %>

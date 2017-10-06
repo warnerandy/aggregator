@@ -11,7 +11,6 @@ defmodule AggRagerWeb.Coherence.ViewHelpers do
 
   @seperator {:safe, "&nbsp; | &nbsp;"}
   @helpers AggRagerWeb.Router.Helpers
-  use CoherenceAssent.ViewHelpers, helpers: AggRagerWeb.Router.Helpers
 
   @recover_link  dgettext("coherence", "Forgot your password?")
   @unlock_link   dgettext("coherence", "Send an unlock email")

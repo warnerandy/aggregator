@@ -31,11 +31,11 @@ defmodule CoherenceAssent.Strategy.BattleNet do
 
   defp set_config(config) do
     [
-      site: "https://warnerinc.from-tx.com:10010/",
+      site: "https://us.api.battle.net",
       authorize_url: "https://us.battle.net/oauth/authorize",
       token_url: "https://us.battle.net/oauth/token",
       token_method: :get,
-      user_url: "https://us.api.battle.net/account/user",
+      user_url: "https://us.api.battle.net/profile/user",
       redirect_uri: config[:custom_redirect_uri],
       authorization_params: [scope: "sc2.profile"]
     ]
@@ -80,7 +80,7 @@ defmodule CoherenceAssent.Strategy.BattleNet do
     user = %{"uid"        => Integer.to_string(user["id"]),
              "name"       => user["battletag"]}
            |> Helpers.prune
-
+    conn = conn |> put_session(:auth_client, client)
     {:ok, %{conn: conn, client: client, user: user}}
   end
   defp normalize({:error, _} = error), do: error

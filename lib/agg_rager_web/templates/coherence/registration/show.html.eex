@@ -18,6 +18,32 @@
 
 </ul>
 
+<h3>Career:</h3>
+
+<%= for character <- Map.get(@user,"profile") do %>
+  <ul>
+    <li>Total Games: <%= character["career"]["careerTotalGames"] %></li>
+    <li>Highest 1v1 Rank: <%= character["career"]["highest1v1Rank"] %></li>
+    <li>Highest Team Rank: <%= character["career"]["highestTeamRank"] %></li>
+    <li>Zerg Wins: <%= character["career"]["zergWins"] %></li>
+    <li>Terran Wins: <%= character["career"]["terranWins"] %></li>
+    <li>Protoss Wins: <%= character["career"]["protossWins"] %></li>
+  </ul>
+<% end %>
+
+<h4>Match History</h4>
+<%= for match <- Map.get(@user, "matches") do %>
+  <ul>
+    <li>Map: <%= match["map"] %></li>
+    <li>Type: <%= match["type"] %></li>
+    <li>Result: <%= match["decision"] %></li>
+    <li>Date: <%= match["date"] %></li>
+  </ul>
+<% end %>
+
+
+
+
 <%= link dgettext("coherence", "Edit"), to: registration_path(@conn, :edit) %> |
 <%= link dgettext("coherence", "Delete"),
         to: registration_path(@conn, :delete),

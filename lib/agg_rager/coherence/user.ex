@@ -9,6 +9,8 @@ defmodule AggRager.Coherence.User do
   schema "users" do
     field :name, :string
     field :email, :string
+    field :profile, :map, virtual: true
+    field :ladders, :map, virtual: true
     coherence_schema()
     coherence_assent_schema()
 

@@ -52,5 +52,3 @@ config :coherence_assent, :providers, [
     strategy: CoherenceAssent.Strategy.BattleNet
   ]
 ]
-
-config :oauth2, debug: true

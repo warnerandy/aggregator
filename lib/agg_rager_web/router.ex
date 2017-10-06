@@ -22,14 +22,14 @@ defmodule AggRagerWeb.Router do
   end
 
   # Add this block
-  scope "/" do
+  scope "/", AggRagerWeb do
     pipe_through :browser
     coherence_routes()
     coherence_assent_routes()        # Add this
   end
 
   # Add this block
-  scope "/" do
+  scope "/", AggRagerWeb do
     pipe_through :protected
     coherence_routes :protected
   end
