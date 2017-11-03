@@ -1,20 +1,25 @@
 <h2>SC2 Profile</h2>
-<ul>
-  <li>
-    <strong><%= dgettext "coherence", "Name:" %></strong>
-    <%= @user.name %>
-  </li>
-</ul>
-
-<h3>Career Stats:</h3>
-
-<%= for character <- @profile do %>
+<section class="col-2">
+<article>
   <ul>
-    <li>Total Games: <%= character["career"]["careerTotalGames"] %></li>
-    <li>Highest 1v1 Rank: <%= character["career"]["highest1v1Rank"] %></li>
-    <li>Highest Team Rank: <%= character["career"]["highestTeamRank"] %></li>
-    <li>Zerg Wins: <%= character["career"]["zergWins"] %></li>
-    <li>Terran Wins: <%= character["career"]["terranWins"] %></li>
-    <li>Protoss Wins: <%= character["career"]["protossWins"] %></li>
+    <li>
+      <strong><%= dgettext "coherence", "Name:" %></strong>
+      <%= @user.name %>
+    </li>
   </ul>
-<% end %>
+</article>
+<article>
+  <h3>Career Stats:</h3>
+
+  <%= for character <- @profile do %>
+    <ul>
+      <li>Total Games: <%= character["career"]["careerTotalGames"] %></li>
+      <li>Highest 1v1 Rank: <%= character["career"]["highest1v1Rank"] %></li>
+      <li>Highest Team Rank: <%= character["career"]["highestTeamRank"] %></li>
+      <li>Zerg Wins: <%= character["career"]["zergWins"] %></li>
+      <li>Terran Wins: <%= character["career"]["terranWins"] %></li>
+      <li>Protoss Wins: <%= character["career"]["protossWins"] %></li>
+    </ul>
+  <% end %>
+</article>
+</section>

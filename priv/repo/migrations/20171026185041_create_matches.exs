@@ -6,7 +6,7 @@ defmodule AggRager.Repo.Migrations.CreateMatches do
       add :map, :string
       add :type, :string
       add :decision, :string
-      add :date, :integer
+      add :date, :utc_datetime
       add :player_id, references(:players, on_delete: :nothing)
       add :opponent_id, references(:players, on_delete: :nothing)
 

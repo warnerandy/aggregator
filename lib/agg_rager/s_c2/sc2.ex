@@ -2,6 +2,11 @@ defmodule SC2 do
 
 	require Logger
 
+	alias AggRager.SC2.Season
+	alias AggRager.SC2.Player
+	alias AggRager.SC2.Match
+	alias AggRager.SC2.PlayerSeason
+
 	def get_current_season(client) do
 		client 
 			|> make_oauth_request("https://us.api.battle.net/data/sc2/season/current")
@@ -21,9 +26,8 @@ defmodule SC2 do
 
 	def get_ladders(client, user_struct) do
 		api_key = CoherenceAssent.config("battle_net")[:client_id]
-		Logger.info inspect api_key
+
 		%{"displayName" => displayName, "id" => id, "realm" => realm} = user_struct
-					|> List.first()
 					|> Map.take(["id", "realm", "displayName"])
 		
 		make_api_request("https://us.api.battle.net/sc2/profile/#{id}/#{realm}/#{displayName}/ladders?apikey=#{api_key}")
@@ -33,10 +37,8 @@ defmodule SC2 do
 
 	def get_match_history(_client, user_struct) do
 		api_key = CoherenceAssent.config("battle_net")[:client_id]
-		Logger.info inspect api_key
-		%{"displayName" => displayName, "id" => id, "realm" => realm} = user_struct
-					|> List.first()
-					|> Map.take(["id", "realm", "displayName"])
+
+		%Player{:display_name => displayName, :player_id => id, :realm => realm} = user_struct
 		
 		make_api_request("https://us.api.battle.net/sc2/profile/#{id}/#{realm}/#{displayName}/matches?apikey=#{api_key}")
 			|> Map.get("matches")
@@ -73,7 +75,7 @@ defmodule SC2 do
 
 	def get_match_stats(match_stats) do
 		match_stats
-		|> Enum.group_by(&(&1["map"]), &(&1["decision"]))
+		|> Enum.group_by(&(Map.get(&1,:map)), &(Map.get(&1,:decision)))
 		|> Enum.map(fn ({map,results}) -> 
 			total = Enum.count(results)
 			wins = Enum.count(Enum.filter(results,&(&1 == "WIN")))
@@ -85,7 +87,7 @@ defmodule SC2 do
 
 		
 		total_matches = Enum.count(match_stats)
-		wins = Enum.count(Enum.filter(match_stats, &(&1["decision"] == "WIN")))
+		wins = Enum.count(Enum.filter(match_stats, &(Map.get(&1,:decision) == "WIN")))
 
 		record_by_date = get_record_by_date(match_stats)
 
@@ -102,8 +104,7 @@ defmodule SC2 do
 	def get_record_by_date(match_stats) do
 		match_stats
 		|> Enum.group_by(fn (match) ->
-			{:ok, date, 0} = DateTime.from_iso8601(match["date"])
-			(DateTime.to_date(date)) end, &(&1["decision"]))
+			(DateTime.to_date(Map.get(match, :date))) end, &(Map.get(&1,:decision)))
 		|> Enum.map(fn ({date,results}) -> 
 			total = Enum.count(results)
 			wins = Enum.count(Enum.filter(results,&(&1 == "WIN")))

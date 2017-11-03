@@ -6,6 +6,9 @@ defmodule CoherenceAssent.Strategy.BattleNet do
 
   use AggRagerWeb, :controller
 
+  alias AggRager.SC2.Player
+  alias AggRager.Repo
+
   require Logger
 
   def authorize_url(conn: conn, config: config) do
@@ -82,7 +85,8 @@ defmodule CoherenceAssent.Strategy.BattleNet do
     user = %{"uid"        => Integer.to_string(character["id"]),
              "name"       => character["name"]}
            |> Helpers.prune
-    conn = conn |> put_session(:auth_client, client)
+    player = AggRager.SC2.Player.find_by_name(Player, user["name"]) |> Repo.one
+    conn = conn |> put_session(:auth_client, client) |> put_session(:player, player)
     {:ok, %{conn: conn, client: client, user: user}}
   end
   defp normalize({:error, _} = error), do: error

@@ -17,7 +17,7 @@
         <nav role="navigation">
           <ul class="nav">
             <li class="<%= active_link(@conn, AggRagerWeb.SC2.ProfileController)%>"><%= link "Profile", to: "/sc2/profile" %></li>
-            <li class="<%= active_link(@conn, AggRagerWeb.SC2.MapController)%>"><%= link "Match", to: "/sc2/map" %></li>
+            <li class="<%= active_link(@conn, AggRagerWeb.SC2.MapController)%>"><%= link "Match Stats", to: "/sc2/map" %></li>
           </ul>
           <ul class="nav-right nav">
             <%= coherence_links(@conn, :layout) %>

@@ -110,6 +110,7 @@ defmodule AggRager.SC2 do
   ###### PLAYER Methods
 
   def get_player!(id), do: Repo.get!(Player, id)
+  def get_player_by_name!(name), do: Repo.get!(Player, Player.find_by_name(Player, name))
 
   def create_player(attrs \\ %{}) do
     %Player{}
@@ -158,6 +159,37 @@ defmodule AggRager.SC2 do
       {:terran_wins, p["career"]["terranWins"]},
       {:zerg_wins, p["career"]["zergWins"]},
       {:player_id, Integer.to_string(p["id"])}])
+  end
+
+  def sync_matches(auth_client, player) do
+    last_game_date = Match.find_last_game_for_player(Match, player) |> Repo.one()
+    Logger.info "#{is_nil last_game_date}"
+    matches = SC2.get_match_history(auth_client, player)
+      |> Enum.filter(fn (match) ->
+        case last_game_date do
+          nil -> true
+          date -> DateTime.compare(DateTime.from_unix!(Map.get(match, "date")), elem(last_game_date,0)) == :gt
+        end
+
+      end)
+      |> Enum.map(fn (match) -> 
+        m = Map.replace(match, "date", convert_date(match["date"]))
+        |> Map.put("player_id", Map.get(player, :id))
+        Match.changeset(%Match{}, m)
+      end)
+    Enum.each(matches, &(Repo.insert(&1)))
+    get_matches_for_player(player)
+  end
+
+  defp convert_date(unix_date) do
+    case DateTime.from_unix(unix_date) do
+      {:ok, date} ->
+        DateTime.to_string(date)
+    end
+  end
+
+  def get_matches_for_player(player) do 
+    Repo.all(Match.find_by_player(Match, player))
   end
 
 end
