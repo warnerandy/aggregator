@@ -40,6 +40,7 @@ defmodule AggRagerWeb do
       import AggRagerWeb.Router.Helpers
       import AggRagerWeb.ErrorHelpers
       import AggRagerWeb.Gettext
+      import AggRagerWeb.Coherence.ViewHelpers
     end
   end
 

@@ -31,7 +31,7 @@ defmodule SC2 do
 			|> Enum.filter(fn(ladder) -> length(ladder["ladder"]) > 0 end)
 	end
 
-	def get_match_history(client, user_struct) do
+	def get_match_history(_client, user_struct) do
 		api_key = CoherenceAssent.config("battle_net")[:client_id]
 		Logger.info inspect api_key
 		%{"displayName" => displayName, "id" => id, "realm" => realm} = user_struct
@@ -51,7 +51,12 @@ defmodule SC2 do
 		Logger.info url
 		case OAuth2.Client.get(client, url) do
 			{:ok, resp} -> resp.body
-			_ -> ""
+			{:error, %OAuth2.Response{body: body}} ->
+				Logger.info "Something bad happened: #{inspect body}"
+				%{}
+			{:error, %OAuth2.Error{reason: reason}} ->
+				Logger.info "#{reason}"
+				%{}
 		end
 	end
 
@@ -65,4 +70,46 @@ defmodule SC2 do
 		    reason
 		end
 	end
+
+	def get_match_stats(match_stats) do
+		match_stats
+		|> Enum.group_by(&(&1["map"]), &(&1["decision"]))
+		|> Enum.map(fn ({map,results}) -> 
+			total = Enum.count(results)
+			wins = Enum.count(Enum.filter(results,&(&1 == "WIN")))
+			losses = total - wins
+			{map, [total: total, wins: wins, losses: losses, pct: round(Float.floor((wins/total) * 100))]} end)
+	end
+
+	def get_recent_record(match_stats) do
+
+		
+		total_matches = Enum.count(match_stats)
+		wins = Enum.count(Enum.filter(match_stats, &(&1["decision"] == "WIN")))
+
+		record_by_date = get_record_by_date(match_stats)
+
+		[
+			overall: [
+				total: total_matches,
+				wins: wins,
+				losses: (total_matches - wins)
+				],
+			by_date: record_by_date
+		]
+	end
+
+	def get_record_by_date(match_stats) do
+		match_stats
+		|> Enum.group_by(fn (match) ->
+			{:ok, date, 0} = DateTime.from_iso8601(match["date"])
+			(DateTime.to_date(date)) end, &(&1["decision"]))
+		|> Enum.map(fn ({date,results}) -> 
+			total = Enum.count(results)
+			wins = Enum.count(Enum.filter(results,&(&1 == "WIN")))
+			{date, [total: total, wins: wins, losses: total - wins]} end)
+		|> Enum.sort(&(Date.compare(elem(&1,0), elem(&2,0)) == :lt))
+		|> Enum.reverse
+	end
+
 end

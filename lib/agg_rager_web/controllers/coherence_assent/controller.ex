@@ -7,7 +7,7 @@ defmodule AggRagerWeb.CoherenceAssent.Controller do
 
   def callback_response({:ok, :user_created, user}, conn, _provider, _user_params, params) do
     conn
-    |> send_confirmation(user)
+    # |> send_confirmation(user)
     |> Coherence.Controller.login_user(user)
     |> redirect_to(:registration_create, params)
   end
@@ -46,10 +46,10 @@ defmodule AggRagerWeb.CoherenceAssent.Controller do
   end
 
   defp send_confirmation(conn, user) do
-    # case Coherence.Config.user_schema.confirmed?(user) do
-    #   false -> Coherence.Controller.send_confirmation(conn, user, Coherence.Config.user_schema)
-    #   _     -> conn
-    # end
+    case Coherence.Config.user_schema.confirmed?(user) do
+      false -> Coherence.Controller.send_confirmation(conn, user, Coherence.Config.user_schema)
+      _     -> conn
+    end
     conn
   end
 end

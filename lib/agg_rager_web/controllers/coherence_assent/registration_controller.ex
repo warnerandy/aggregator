@@ -4,7 +4,7 @@ defmodule AggRagerWeb.CoherenceAssent.RegistrationController do
 
   alias CoherenceAssent.Callback
   import Plug.Conn, only: [get_session: 2, delete_session: 2]
-  alias CoherenceAssent.Controller
+  alias AggRagerWeb.CoherenceAssent.Controller
 
   def add_login_field(conn, %{"provider" => _provider} = params) do
     user_schema = Config.user_schema

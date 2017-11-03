@@ -35,7 +35,7 @@ defmodule CoherenceAssent.Strategy.BattleNet do
       authorize_url: "https://us.battle.net/oauth/authorize",
       token_url: "https://us.battle.net/oauth/token",
       token_method: :get,
-      user_url: "https://us.api.battle.net/profile/user",
+      user_url: "https://us.api.battle.net/sc2/profile/user",
       redirect_uri: config[:custom_redirect_uri],
       authorization_params: [scope: "sc2.profile"]
     ]
@@ -77,8 +77,10 @@ defmodule CoherenceAssent.Strategy.BattleNet do
 
 
   defp normalize({:ok, %{conn: conn, client: client, user: user}}) do
-    user = %{"uid"        => Integer.to_string(user["id"]),
-             "name"       => user["battletag"]}
+    character = user["characters"]
+     |> List.first
+    user = %{"uid"        => Integer.to_string(character["id"]),
+             "name"       => character["name"]}
            |> Helpers.prune
     conn = conn |> put_session(:auth_client, client)
     {:ok, %{conn: conn, client: client, user: user}}

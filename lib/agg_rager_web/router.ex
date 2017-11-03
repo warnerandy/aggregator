@@ -18,6 +18,7 @@ defmodule AggRagerWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug AggRagerWeb.EnsureAuthClient
     plug Coherence.Authentication.Session, protected: true  # Add this
   end
 
@@ -32,6 +33,14 @@ defmodule AggRagerWeb.Router do
   scope "/", AggRagerWeb do
     pipe_through :protected
     coherence_routes :protected
+  end
+
+  scope "/sc2", AggRagerWeb.SC2 do
+    pipe_through :protected
+    coherence_routes :protected
+
+    get "/profile", ProfileController, :index
+    get "/map", MapController, :index
   end
 
   scope "/", AggRagerWeb do

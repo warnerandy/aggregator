@@ -1,0 +1,40 @@
+<section class="col-2">
+  <article>
+    <h2>Overall</h2>
+    <ul class="record">
+      <li class="total"><div class="stat"><%= @record[:overall][:total] %></div><div class="label">Total</div></li>
+      <li class="wins"><div class="stat"><%= @record[:overall][:wins] %></div><div class="label">Wins</div></li>
+      <li class="losses"><div class="stat"><%= @record[:overall][:losses] %></div><div class="label">Losses</div></li>
+    </ul>
+    <%= for {date, stats} <- @record[:by_date] do %>
+      <h3>Date: <%= date %></h3>
+      <ul class="record">
+        <li class="total"><div class="stat"><%= stats[:total] %></div><div class="label">Total</div></li>
+        <li class="wins"><div class="stat"><%= stats[:wins] %></div><div class="label">Wins</div></li>
+        <li class="losses"><div class="stat"><%= stats[:losses]%></div><div class="label">Losses</div></li>
+      </ul>
+    <% end %>
+  </article>
+  <article>
+    <h2> Map Stats</h2>
+    <%= for {map, stats} <- @map_stats do %>
+      <h3><%= map %></h3>
+      <ul class="record">
+        <li class="total"><div class="stat"><%= stats[:total] %></div><div class="label">Total</div></li>
+        <li class="wins"><div class="stat"><%= stats[:wins] %></div><div class="label">Wins</div></li>
+        <li class="losses"><div class="stat"><%= stats[:losses] %></div><div class="label">Losses</div></li>
+        <li class="pct"><div class="stat"><%= stats[:pct] %>%</div><div class="label">Win Pct</div></li>
+      </ul>
+    <% end %>
+
+    <h2>Match History</h2>
+    <%= for match <- @history do %>
+      <ul>
+        <li>Map: <%= match["map"] %></li>
+        <li>Type: <%= match["type"] %></li>
+        <li>Result: <%= match["decision"] %></li>
+        <li>Date: <%= match["date"] %></li>
+      </ul>
+    <% end %>
+  </article>
+</section>

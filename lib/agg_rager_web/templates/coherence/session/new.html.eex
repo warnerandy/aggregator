@@ -30,6 +30,7 @@
 
   <div class="form-group">
     <%= coherence_links(@conn, :new_session) %>
+    <%= oauth_links(@conn) %>
   </div>
 
 <% end %>

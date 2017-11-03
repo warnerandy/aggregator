@@ -81,10 +81,6 @@ defmodule AggRagerWeb.Coherence.RegistrationController do
 
     user_response = get_session(conn, :auth_client)
       |> SC2.get_profile()
-
-    api_match_response = get_session(conn, :auth_client)
-      |> SC2.get_match_history(user_response)
-      |> Enum.map(fn (match) -> Map.replace(match, "date", convert_date(match["date"])) end)
     
     api_ladder_response = get_session(conn, :auth_client)
       |> SC2.get_ladders(user_response)
@@ -100,7 +96,7 @@ defmodule AggRagerWeb.Coherence.RegistrationController do
 
     # Logger.info inspect user_response
 
-    user = Map.merge(Coherence.current_user(conn), %{"profile" => user_response, "ladders" => api_ladder_response, "matches" => api_match_response})
+    user = Map.merge(Coherence.current_user(conn), %{"profile" => user_response, "ladders" => api_ladder_response})
 
 
     Coherence.update_user_login(conn, user)
@@ -108,13 +104,6 @@ defmodule AggRagerWeb.Coherence.RegistrationController do
     # Logger.info inspect ladder_response
 
     render(conn, "show.html", [user: user])
-  end
-
-  defp convert_date(unix_date) do
-    case DateTime.from_unix(unix_date) do
-      {:ok, date} ->
-        DateTime.to_string(date)
-    end
   end
 
   @doc """
