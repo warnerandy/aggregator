@@ -1,0 +1,36 @@
+@require colors;
+
+nav {
+	padding: 0 16px;
+	color: white;
+	max-width 1200px;
+	margin:0 auto;
+	ul.nav {
+		margin:0;
+		padding:0;
+		display: inline-block;
+		li {
+			display: inline-block;
+			a {
+				padding: 16px 16px;
+				text-decoration: none;
+				color:white;
+				display: inline-block;
+				&:hover {
+					background-color: blizzBlueDkHov;
+					color: white;
+				}
+			}
+			&.active{
+				a {
+					font-weight bold;
+					color: white;
+					border-bottom:3px solid blizzBlueBorder
+				}
+			}
+		}
+		&.nav-right {
+			float: right;
+		}
+	}
+}	

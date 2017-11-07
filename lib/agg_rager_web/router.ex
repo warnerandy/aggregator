@@ -19,6 +19,7 @@ defmodule AggRagerWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug AggRagerWeb.EnsureAuthClient
+    plug AggRagerWeb.EnsurePlayer
     plug Coherence.Authentication.Session, protected: true  # Add this
   end
 

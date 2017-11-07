@@ -43,7 +43,8 @@ defmodule AggRager.Mixfile do
       {:cowboy, "~> 1.0"},
       {:coherence, git: "git@github.com:smpallen99/coherence.git", branch: "master", override: true},
       {:coherence_assent, "~> 0.1.0"},
-      {:httpoison, "~> 0.13"}
+      {:httpoison, "~> 0.13"},
+      {:timex, "~> 3.1"}
     ]
   end
 

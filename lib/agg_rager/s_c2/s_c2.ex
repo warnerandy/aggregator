@@ -141,6 +141,7 @@ defmodule AggRager.SC2 do
       nil -> create_player(parse_player_response(attrs))
       _ -> update_player(existing_player, parse_player_response(attrs))
     end
+    get_player_by_name!(attrs["name"])
   end
 
   def parse_player_response(p) do

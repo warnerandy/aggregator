@@ -1,3 +1,27 @@
+<section class="tabs">
+  <ul>
+    <%= if is_nil(@conn.params["filter"]) do %>
+      <li class="active">All</li>
+      <% else %>
+      <li><%= link("All", to: "/sc2/map") %></li>
+    <% end %>
+    <%= if @conn.params["filter"] == "SOLO" do %>
+    <li class="active">Solo Ladder</li>
+      <% else %>
+      <li><%= link("Solo Ladder", to: "/sc2/map?filter=SOLO") %></li>
+    <% end %>
+    <%= if @conn.params["filter"] == "TEAM" do %>
+    <li class="active">2v2 Ladder</li>
+      <% else %>
+      <li><%= link("2v2 Ladder", to: "/sc2/map?filter=TWOS") %></li>
+    <% end %>
+    <%= if @conn.params["filter"] == "CUSTOM" do %>
+    <li class="active">Custom</li>
+    <% else %>
+      <li><%= link("Custom", to: "/sc2/map?filter=CUSTOM") %></li>
+    <% end %>
+  </ul>
+</section>
 <section class="col-2">
   <article>
     <h2>Overall</h2>
@@ -26,15 +50,28 @@
         <li class="pct"><div class="stat"><%= stats[:pct] %>%</div><div class="label">Win Pct</div></li>
       </ul>
     <% end %>
-
-    <h2>Match History</h2>
-    <%= for match <- @history do %>
-      <ul>
-        <li>Map: <%= match[:map] %></li>
-        <li>Type: <%= match[:type] %></li>
-        <li>Result: <%= match[:decision] %></li>
-        <li>Date: <%= match[:date] %></li>
-      </ul>
-    <% end %>
   </article>
+</section>
+<section>
+  <h2>Match History</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Map</th>
+        <th>Type</th>
+        <th>Result</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <%= for match <- @history do %>
+    <tbody>
+      <tr>
+        <td><%= match[:map] %></td>
+        <td class="center"><%= match[:type] %></td>
+        <td class="center <%= match[:decision] %>"><%= match[:decision] %></td>
+        <td class="center"><%= date_format match[:date], "%b %d %Y %T" %></td>
+      </tr>
+    </tbody>
+    <% end %>
+  </table>
 </section>

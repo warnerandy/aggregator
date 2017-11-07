@@ -6,7 +6,6 @@ defmodule AggRagerWeb.EnsureAuthClient do
   def init(options) do
     # initialize options
 
-    options
   end
 
   def call(conn, _opts) do
@@ -17,7 +16,7 @@ defmodule AggRagerWeb.EnsureAuthClient do
     # Logger.debug "#{inspect fetch_session(conn)}"
     
     case auth_client do
-      x when is_nil(x) -> conn |> redirect(to: '/auth/battle_net') |> halt()
+      x when is_nil(x) -> conn |> redirect(to: "/auth/battle_net") |> halt()
       _ -> conn
     end
   end
