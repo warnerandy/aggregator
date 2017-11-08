@@ -12,4 +12,16 @@ defmodule AggRagerWeb.SC2.MapView do
     date
     |> Timex.format!(format_string, :strftime )
   end
+
+  def match_type(type) when type == "SOLO" do
+  	"1v1"
+  end
+
+  def match_type(type) when type == "TWOS" do
+  	"2v2"
+  end
+
+  def match_type(type) do
+  	type
+  end
 end

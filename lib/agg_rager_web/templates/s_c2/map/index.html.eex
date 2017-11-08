@@ -36,6 +36,92 @@
         <li class="total"><div class="stat"><%= stats[:total] %></div><div class="label">Total</div></li>
         <li class="wins"><div class="stat"><%= stats[:wins] %></div><div class="label">Wins</div></li>
         <li class="losses"><div class="stat"><%= stats[:losses]%></div><div class="label">Losses</div></li>
+        <li class="arrow">
+          <%= if (@record[:overall][:wins]/@record[:overall][:total] <= stats[:wins]/stats[:total]) do %>
+          
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   viewBox="0 0 280 565" style="enable-background:new 0 0 280 565;" xml:space="preserve">
+   <defs>
+    <filter id="dropshadow" x="-10%" y="-10%" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceGraphic" dx="0" dy="0" />
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="20" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+  </defs>
+<style type="text/css">
+  .arrow-opacity{opacity:0.6;}
+  .green-arrow{fill:#31FF84; filter:url(#dropshadow)}
+</style>
+<g id="Layer_2">
+  <g class="arrow-opacity">
+    <g>
+      <polygon class="green-arrow" points="92,398.6 92,185.7 28.8,185.7 140,31.9 251.3,185.7 188,185.7 188,398.6      "/>
+      <path d="M140,32.7l110.3,152.5h-61.8h-1v1v211.9h-95V186.2v-1h-1H29.7L140,32.7 M140,31L27.8,186.2h63.8v212.9h97V186.2h63.8
+        L140,31L140,31z"/>
+    </g>
+  </g>
+  <g class="arrow-opacity">
+    <g>
+      <rect x="92.5" y="422.8" class="green-arrow" width="95" height="58.9"/>
+      <path d="M187,423.3v57.9H93v-57.9H187 M188,422.3H92v59.9h96V422.3L188,422.3z"/>
+    </g>
+  </g>
+  <g class="arrow-opacity">
+    <g>
+      <rect x="92.5" y="499.4" class="green-arrow" width="95" height="42.1"/>
+      <path d="M187,499.9V541H93v-41.1H187 M188,498.9H92V542h96V498.9L188,498.9z"/>
+    </g>
+  </g>
+</g>
+</svg>
+
+
+          <% else %>
+
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   viewBox="0 0 280 565" style="enable-background:new 0 0 280 565;" xml:space="preserve">
+
+   <defs>
+    <filter id="dropshadow" x="-10%" y="-10%" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceGraphic" dx="0" dy="0" />
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="20" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+  </defs>
+<style type="text/css">
+  .arrow-opacity{opacity:0.6;}
+  .red-arrow{fill:#FF2E2E; filter:url(#dropshadow)}
+</style>
+<g id="Layer_1">
+</g>
+<g id="Layer_2">
+  <g class="arrow-opacity">
+    <g>
+      <polygon class="red-arrow" points="28.8,387.3 92,387.3 92,174.4 188,174.4 188,387.3 251.3,387.3 140,541.1       "/>
+      <path d="M187.5,174.9v211.9v1h1h61.8L140,540.3L29.7,387.8h61.8h1v-1V174.9H187.5 M188.5,173.9h-97v212.9H27.8L140,542
+        l112.2-155.2h-63.8V173.9L188.5,173.9z"/>
+    </g>
+  </g>
+  <g class="arrow-opacity">
+ 
+    <g>
+      <rect x="92.5" y="91.4" class="red-arrow" width="95" height="58.9"/>
+      <path d="M187,91.9v57.9H93V91.9H187 M188,90.9H92v59.9h96V90.9L188,90.9z"/>
+    </g>
+  </g>
+  <g class="arrow-opacity">
+    <g>
+      <rect x="92.5" y="31.5" class="red-arrow" width="95" height="42.1"/>
+      <path d="M187,32v41.1H93V32H187 M188,31H92v43.1h96V31L188,31z"/>
+    </g>
+  </g>
+</g>
+</svg>
+
+
+
+          <% end %>
+        </li>
       </ul>
     <% end %>
   </article>
@@ -67,7 +153,7 @@
     <tbody>
       <tr>
         <td><%= match[:map] %></td>
-        <td class="center"><%= match[:type] %></td>
+        <td class="center"><%= match_type match[:type] %></td>
         <td class="center <%= match[:decision] %>"><%= match[:decision] %></td>
         <td class="center"><%= date_format match[:date], "%b %d %Y %T" %></td>
       </tr>

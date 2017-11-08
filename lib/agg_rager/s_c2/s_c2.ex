@@ -191,6 +191,7 @@ defmodule AggRager.SC2 do
 
   def get_matches_for_player(player) do 
     Repo.all(Match.find_by_player(Match, player))
+    |> Enum.sort(&(DateTime.compare(&1.date, &2.date) == :gt))
   end
 
 end
