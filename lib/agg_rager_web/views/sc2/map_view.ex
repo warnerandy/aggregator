@@ -8,7 +8,6 @@ defmodule AggRagerWeb.SC2.MapView do
   def date_format(date, format), do: date_formatter(date, format)
 
   defp date_formatter(date, format_string) do
-  	Logger.info "#{inspect date}, #{format_string}"
     date
     |> Timex.format!(format_string, :strftime )
   end

@@ -41,7 +41,8 @@ defmodule AggRagerWeb.Router do
     coherence_routes :protected
 
     get "/profile", ProfileController, :index
-    get "/map", MapController, :index
+    get "/ladders", LadderController, :index
+    get "/matches", MapController, :index
   end
 
   scope "/", AggRagerWeb do

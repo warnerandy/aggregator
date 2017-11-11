@@ -1,25 +1,23 @@
 <div class="jumbotron">
   <h2><%= gettext "Welcome to %{name}!", name: "Agg-rager!!" %></h2>
-  <p class="lead">A SC2 Stat aggregator.</p>
+  <p class="lead">Everybody has trends, wether its better wins by time of day or day of week or whatever we slice and dice the data to find out how you play the best. We take the blizzard stats and go a step further With replay analysis. If you want to improve this is a good place to start</p>
 </div>
 
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <%= link "Profile", to: "/sc2/profile" %>
-      </li>
-      <li>
-        <%= link "Maps", to: "/sc2/map"  %>
-      </li>
-    </ul>
+<div class="stats">
+  <div class="stat">
+    <div>Some chart</div>
+    <h4>Some chart title</h4>
   </div>
-
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      
-    </ul>
+  <div class="stat">
+    <div>Some chart</div>
+    <h4>Some chart title</h4>
+  </div>
+  <div class="stat">
+    <div>Some chart</div>
+    <h4>Some chart title</h4>
+  </div>
+  <div class="stat">
+    <div>Some chart</div>
+    <h4>Some chart title</h4>
   </div>
 </div>

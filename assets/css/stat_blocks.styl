@@ -6,6 +6,8 @@ ul.record {
 	margin:0;
 	list-style: none;
 	align-items: center;
+	
+	padding: 8px 16px;
 	li {
 		font-size:16px;
 		text-align: center;
@@ -23,5 +25,37 @@ ul.record {
 				height:50px;
 			}
 		}
+	}
+}
+
+.stats {
+	display flex;
+	justify-content space-between;
+	flex-wrap wrap;
+	.stat {
+		padding 8px;
+		display: inline-block;
+		border: 1px solid blizzBlueBorder;
+		background-color blizzGrey;
+		width:calc(50% - 8px);
+		margin-bottom:16px;
+	}
+}
+
+.stat-block {
+	background-color blizzGrey;
+	border: 1px solid blizzBlueBorder;
+	margin-bottom:16px;
+	&:hover {
+		background-color lighten(blizzGrey, 5%);
+		transition .2s background-color;
+	}
+	h3 {
+		padding: 8px 16px;
+		margin:0;
+		font-weight normal;
+	}
+	ul {
+		padding:16px;
 	}
 }

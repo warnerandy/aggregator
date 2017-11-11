@@ -24,13 +24,10 @@ defmodule SC2 do
 			|> Enum.map(fn character -> Map.take(character, ["id", "realm", "name", "displayName", "clanName", "clanTag", "career", "season"]) end)
 	end
 
-	def get_ladders(client, user_struct) do
+	def get_ladders(client, player) do
 		api_key = CoherenceAssent.config("battle_net")[:client_id]
-
-		%{"displayName" => displayName, "id" => id, "realm" => realm} = user_struct
-					|> Map.take(["id", "realm", "displayName"])
 		
-		make_api_request("https://us.api.battle.net/sc2/profile/#{id}/#{realm}/#{displayName}/ladders?apikey=#{api_key}")
+		make_api_request("https://us.api.battle.net/sc2/profile/#{player.player_id}/#{player.realm}/#{player.display_name}/ladders?apikey=#{api_key}")
 			|> Map.get("currentSeason")
 			|> Enum.filter(fn(ladder) -> length(ladder["ladder"]) > 0 end)
 	end

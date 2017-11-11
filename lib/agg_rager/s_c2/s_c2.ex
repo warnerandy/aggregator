@@ -194,4 +194,11 @@ defmodule AggRager.SC2 do
     |> Enum.sort(&(DateTime.compare(&1.date, &2.date) == :gt))
   end
 
+  def sync_ladders(auth_client, player) do
+    SC2.get_ladders(auth_client, player)
+    |> Enum.filter(&(Enum.count(&1["ladder"]) > 0))
+    |> Enum.map(&(List.first(&1["ladder"])))
+    |> Enum.map(fn(ladder) -> SC2.get_ladder(auth_client, ladder["ladderId"]) end)
+  end
+
 end
