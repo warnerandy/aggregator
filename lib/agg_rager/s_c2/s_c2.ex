@@ -199,8 +199,41 @@ defmodule AggRager.SC2 do
     |> Enum.filter(&(Enum.count(&1["ladder"]) > 0))
     |> Enum.map(&(List.first(&1["ladder"])))
     |> Enum.map(fn(ladder) -> SC2.get_ladder(auth_client, ladder["ladderId"]) end)
-    |> Enum.map(fn(ladder) -> ladder["team"] end)
+    |> Enum.map(fn(ladder) -> %{teams: Enum.map(ladder["team"], &(normalize_team(&1))), league: ladder["league"]["league_key"]} end)
+    # |> List.flatten()
     # |> Enum.map(fn(ladder))
+  end
+
+  def get_my_teams(auth_client, player) do
+    sync_ladders(auth_client, player)
+    |> Enum.map(fn (ladder) ->
+      %{
+        team: List.first(Enum.filter(ladder.teams, fn (team) ->
+          Enum.any?(team.members, fn (member) ->
+            Integer.to_string(member.id) == player.player_id
+          end)
+        end)),
+        league: ladder.league
+      }
+    end)
+  end
+
+  def normalize_team(team) do
+    %{
+      members: Enum.map(team["member"],&(normalize_team_member(&1))),
+      mmr: team["rating"],
+      current_win_streak: team["current_win_streak"],
+      longest_win_streak: team["longest_win_streak"],
+    }
+  end
+
+  def normalize_team_member(member) do
+    %{
+      id: member["character_link"]["id"],
+      name: member["character_link"]["battle_tag"],
+      race: List.first(member["played_race_count"])["race"]["en_US"],
+      clan: %{tag: member["clan_link"]["clan_tag"], name: member["clan_link"]["clan_name"]}
+    }
   end
 
 end

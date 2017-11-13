@@ -1,5 +1,21 @@
 <h1>Ladder</h1>
 
+<div class="stats">
+	<%= for ladder <- @ladders do %>
+  <div class="stat">
+    <div>
+    	<%= for member <- ladder.team.members do %>
+    	<div class="player">
+			<span class="player-name"><%= member.name %></span> - <span class="race"><%= member.race %></span>
+		</div>
+    	<% end %>
+    	<div class="rating">MMR: <%= ladder.team.mmr %></div>
+    </div>
+    <h4></h4>
+  </div>
+  <% end %>
+</div>
+
 <%= for league <- @leagues do %>
 	<h2> <%= league List.first(league).league_id %></h2>
 	<%= for sub_league <- Enum.reverse(league) do %>
