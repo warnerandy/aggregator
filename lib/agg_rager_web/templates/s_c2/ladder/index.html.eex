@@ -1,0 +1,8 @@
+<h1>Ladder</h1>
+
+<%= for league <- @leagues do %>
+	<h2> <%= league List.first(league).league_id %></h2>
+	<%= for sub_league <- Enum.reverse(league) do %>
+		<h3><%= sub_league.id %> <%= sub_league.min_rating %> - <%= sub_league.max_rating %> </h3>
+	<% end %>
+<% end %>

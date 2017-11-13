@@ -32,6 +32,33 @@ defmodule SC2 do
 			|> Enum.filter(fn(ladder) -> length(ladder["ladder"]) > 0 end)
 	end
 
+	def get_league(client, season_id, queue_id, team_type, league_id) do 
+		# https://us.api.battle.net/data/sc2/league/:SEASON_ID/:QUEUE_ID/:TEAM_TYPE/:LEAGUE_ID
+		client 
+			|> make_oauth_request("https://us.api.battle.net/data/sc2/league/#{season_id}/#{queue_id}/#{team_type}/#{league_id}")
+	end
+
+	def get_all_leagues(client, season_id, queue_id, team_type) do
+		0..6
+		|> Enum.map (&(get_league(client, season_id, queue_id, team_type, &1)))
+	end
+
+	def get_all_league_ranges(leagues) do
+		leagues |> Enum.map(fn(league) ->
+	        Enum.map(league["tier"],fn(tier) ->
+	        %{
+	          id: Map.get(tier,"id"),
+	          min_rating: Map.get(tier, "min_rating"),
+	          max_rating: Map.get(tier, "max_rating"),
+	          league_id: league["key"]["league_id"],
+	          season_id: league["key"]["season_id"],
+	          queue_id: league["key"]["queue_id"],
+	          team_type: league["key"]["team_type"]
+	        }
+	      end)
+	    end)
+	end
+
 	def get_match_history(_client, user_struct) do
 		api_key = CoherenceAssent.config("battle_net")[:client_id]
 
