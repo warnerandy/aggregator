@@ -1,24 +1,40 @@
 <h1>Ladder</h1>
-
 <div class="stats">
-	<%= for ladder <- @ladders do %>
-  <div class="stat">
+  <%= for league <- @leagues do %>
+  <div class="stat full-width ">
+    <h2><%= league.team_league_type %> <small>(<%= league.team_league %>) <%= league.team.rating %></small></h2>
     <div>
-    	<%= for member <- ladder.team.members do %>
-    	<div class="player">
-			<span class="player-name"><%= member.name %></span> - <span class="race"><%= member.race %></span>
-		</div>
-    	<% end %>
-    	<div class="rating">MMR: <%= ladder.team.mmr %></div>
-    </div>
-    <h4></h4>
+      <%= for member <- league.team.members do %>
+        <div class="player">
+          <svg viewBox="0 0 32 32" class="race-logo <%= member.race %>">
+            <use xlink:href="#<%= member.race %>"></use>
+          </svg><span class="player-name"><%= member.name %></span>
+        </div>
+      <% end %>
+      <div class="progress">
+            <div class="current-marker league-marker <%= league.team_league %>" data-position="<%= league.team_position %>%">
+          </div>
+        <div class="bar">
+            <div class="bar-inner" data-width="<%= league.team_position %>%"></div>
+        </div>
+        <div class="league-placements">
+          <%= for placement <- league.league_placements do %>
+            <div class="league league-marker <%= elem(placement,0) %>" style="left:calc(<%= elem(placement,1) %>% - 21px);">
+          </div>  
+          <% end %>
+        </div>
+      </div>
+      <div class="ladder-stats">
+        <div class="stat">
+          <div class="label">Record</div>
+          <div class="value"><span class="wins"><%= league.team.wins %></span>/<span class="losses"><%= league.team.losses %></span>/<span class="ties"><%= league.team.ties %></span></div>
+        </div>
+        <div class="stat">
+          <div class="label">Win Streak/Best</div>
+          <div class="value"><%= league.team.current_win_streak %>/<%= league.team.longest_win_streak %></div>
+        </div>
+      </div>
   </div>
-  <% end %>
 </div>
-
-<%= for league <- @leagues do %>
-	<h2> <%= league List.first(league).league_id %></h2>
-	<%= for sub_league <- Enum.reverse(league) do %>
-		<h3><%= sub_league.id %> <%= sub_league.min_rating %> - <%= sub_league.max_rating %> </h3>
-	<% end %>
 <% end %>
+</div>

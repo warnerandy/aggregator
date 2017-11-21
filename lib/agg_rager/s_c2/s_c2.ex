@@ -12,6 +12,9 @@ defmodule AggRager.SC2 do
   alias AggRager.SC2.Player
   alias AggRager.SC2.Match
   alias AggRager.SC2.PlayerSeason
+  alias AggRager.SC2.League
+  alias AggRager.SC2.Team
+  alias AggRager.SC2.TeamPlayer
 
   @doc """
   Returns the list of seasons.
@@ -110,7 +113,7 @@ defmodule AggRager.SC2 do
   ###### PLAYER Methods
 
   def get_player!(id), do: Repo.get!(Player, id)
-  def get_player_by_name!(name), do: Repo.get!(Player, Player.find_by_name(Player, name))
+  def get_player_by_name!(name), do: Repo.one!(Player.find_by_name(name))
 
   def create_player(attrs \\ %{}) do
     %Player{}
@@ -133,10 +136,7 @@ defmodule AggRager.SC2 do
   end
 
   def create_update_player(attrs) do
-    existing_player = Player
-      |> Player.find_by_name(attrs["name"])
-      |> Repo.one()
-      Logger.info "#{inspect parse_player_response(attrs)}"
+    existing_player = get_player_by_name!(attrs["name"])
     case existing_player do
       nil -> create_player(parse_player_response(attrs))
       _ -> update_player(existing_player, parse_player_response(attrs))
@@ -164,7 +164,6 @@ defmodule AggRager.SC2 do
 
   def sync_matches(auth_client, player) do
     last_game_date = Match.find_last_game_for_player(Match, player) |> Repo.one()
-    Logger.info "#{is_nil last_game_date}"
     matches = SC2.get_match_history(auth_client, player)
       |> Enum.filter(fn (match) ->
         case last_game_date do
@@ -199,7 +198,7 @@ defmodule AggRager.SC2 do
     |> Enum.filter(&(Enum.count(&1["ladder"]) > 0))
     |> Enum.map(&(List.first(&1["ladder"])))
     |> Enum.map(fn(ladder) -> SC2.get_ladder(auth_client, ladder["ladderId"]) end)
-    |> Enum.map(fn(ladder) -> %{teams: Enum.map(ladder["team"], &(normalize_team(&1))), league: ladder["league"]["league_key"]} end)
+    |> Enum.map(fn(ladder) -> %{teams: Enum.map(ladder["team"], &(Team.normalize_team(&1))), league: ladder["league"]["league_key"]} end)
     # |> List.flatten()
     # |> Enum.map(fn(ladder))
   end
@@ -207,33 +206,72 @@ defmodule AggRager.SC2 do
   def get_my_teams(auth_client, player) do
     sync_ladders(auth_client, player)
     |> Enum.map(fn (ladder) ->
-      %{
-        team: List.first(Enum.filter(ladder.teams, fn (team) ->
+      team = List.first(Enum.filter(ladder.teams, fn (team) ->
           Enum.any?(team.members, fn (member) ->
             Integer.to_string(member.id) == player.player_id
           end)
-        end)),
+        end))
+      create_or_update_team(team)
+      %{
+        team: team,
         league: ladder.league
       }
     end)
   end
 
-  def normalize_team(team) do
-    %{
-      members: Enum.map(team["member"],&(normalize_team_member(&1))),
-      mmr: team["rating"],
-      current_win_streak: team["current_win_streak"],
-      longest_win_streak: team["longest_win_streak"],
-    }
+  def create_or_update_team(team) do
+    team_resp = Repo.one(Team.find_by_bnet_id(team))
+    case (team_resp) do
+      nil ->
+        create_team(team)
+      t ->
+        update_team(t, team)
+    end
   end
 
-  def normalize_team_member(member) do
-    %{
-      id: member["character_link"]["id"],
-      name: member["character_link"]["battle_tag"],
-      race: List.first(member["played_race_count"])["race"]["en_US"],
-      clan: %{tag: member["clan_link"]["clan_tag"], name: member["clan_link"]["clan_name"]}
-    }
+  def create_team(attrs) do
+    %Team{}
+    |> Team.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  def update_team(%Team{} = team, attrs) do
+    team
+    |> Team.changeset(attrs)
+    |> Repo.update!()
+  end
+
+  def get_league_data(auth_client, league) do
+    leagues = Repo.all(League.load_all(league))
+    fetch_leagues = Enum.count(leagues) == 0 or Date.compare(DateTime.to_date(List.first(leagues).date), Date.utc_today) != :eq
+    l = case fetch_leagues do
+      true -> load_and_save_leagues(auth_client, league)
+      _ -> leagues
+    end
+    Enum.group_by(l, &(Map.get(&1,:league_id)), &(&1))
+  end
+
+  def load_and_save_leagues(auth_client, league) do
+    leagues = SC2.get_all_leagues(auth_client, league["season_id"], league["queue_id"], league["team_type"])
+    |> SC2.get_all_league_ranges()
+    |> Enum.each(fn(l) ->
+      Enum.each(l, fn (sub) ->
+        %League{}
+        |> League.changeset(
+          %{
+            league_id: sub.league_id,
+            queue_id: sub.queue_id,
+            season_id: sub.season_id,
+            team_type: sub.team_type,
+            date: DateTime.utc_now(),
+            min_rating: sub.min_rating,
+            max_rating: sub.max_rating,
+            sub_league_id: sub.id
+          })
+        |> Repo.insert()
+      end)
+    end)
+    Repo.all(League.load_all(league))
   end
 
 end

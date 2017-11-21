@@ -39,7 +39,7 @@ defmodule SC2 do
 	end
 
 	def get_all_leagues(client, season_id, queue_id, team_type) do
-		0..6
+		0..5
 		|> Enum.map (&(get_league(client, season_id, queue_id, team_type, &1)))
 	end
 

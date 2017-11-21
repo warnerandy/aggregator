@@ -32,8 +32,10 @@ defmodule AggRager.SC2.Player do
     |> validate_required([:name])
   end
 
-  def find_by_name(query, name) when not is_nil(name) do
+  def find_by_name(name) when not is_nil(name) do
     Logger.info "#{name}"
-    from p in query, where: p.name == ^name
+    from p in Player,
+    where: p.name == ^name,
+    limit: 1
   end
 end

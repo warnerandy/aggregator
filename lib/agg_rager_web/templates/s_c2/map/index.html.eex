@@ -25,23 +25,23 @@
   </ul>
 </section>
 <section class="col-2">
-  <article>
+  <article class="stats">
   <h2>Records</h2>
-    <div class="stat-block">
+    <div class="stat-block stat full-width">
       <h3>Overall</h3>
       <ul class="record">
-        <li class="total"><div class="stat"><%= @record[:overall][:total] %></div><div class="label">Total</div></li>
-        <li class="wins"><div class="stat"><%= @record[:overall][:wins] %></div><div class="label">Wins</div></li>
-        <li class="losses"><div class="stat"><%= @record[:overall][:losses] %></div><div class="label">Losses</div></li>
+        <li class="total"><div class="value"><%= @record[:overall][:total] %></div><div class="label">Total</div></li>
+        <li class="wins"><div class="value"><%= @record[:overall][:wins] %></div><div class="label">Wins</div></li>
+        <li class="losses"><div class="value"><%= @record[:overall][:losses] %></div><div class="label">Losses</div></li>
       </ul>
     </div>
     <%= for {date, stats} <- @record[:by_date] do %>
-      <div class="stat-block">
+      <div class="stat-block stat full-width">
         <h3>Date: <%= date %></h3>
         <ul class="record">
-          <li class="total"><div class="stat"><%= stats[:total] %></div><div class="label">Total</div></li>
-          <li class="wins"><div class="stat"><%= stats[:wins] %></div><div class="label">Wins</div></li>
-          <li class="losses"><div class="stat"><%= stats[:losses]%></div><div class="label">Losses</div></li>
+          <li class="total"><div class="value"><%= stats[:total] %></div><div class="label">Total</div></li>
+          <li class="wins"><div class="value"><%= stats[:wins] %></div><div class="label">Wins</div></li>
+          <li class="losses"><div class="value"><%= stats[:losses]%></div><div class="label">Losses</div></li>
           <li class="arrow">
             <%= if (@record[:overall][:wins]/@record[:overall][:total] <= stats[:wins]/stats[:total]) do %>
             
@@ -132,16 +132,16 @@
       </div>
     <% end %>
   </article>
-  <article>
+  <article class="stats">
     <h2> Map Stats</h2>
     <%= for {map, stats} <- @map_stats do %>
-      <div class="stat-block">
+      <div class="stat-block stat full-width">
         <h3><%= map %></h3>
         <ul class="record">
-          <li class="total"><div class="stat"><%= stats[:total] %></div><div class="label">Total</div></li>
-          <li class="wins"><div class="stat"><%= stats[:wins] %></div><div class="label">Wins</div></li>
-          <li class="losses"><div class="stat"><%= stats[:losses] %></div><div class="label">Losses</div></li>
-          <li class="pct"><div class="stat"><%= stats[:pct] %>%</div><div class="label">Win Pct</div></li>
+          <li class="total"><div class="label"><%= stats[:total] %></div><div class="label">Total</div></li>
+          <li class="wins"><div class="label"><%= stats[:wins] %></div><div class="label">Wins</div></li>
+          <li class="losses"><div class="label"><%= stats[:losses] %></div><div class="label">Losses</div></li>
+          <li class="pct"><div class="label"><%= stats[:pct] %>%</div><div class="label">Win Pct</div></li>
         </ul>
       </div>
     <% end %>

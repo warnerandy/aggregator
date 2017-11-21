@@ -19,3 +19,16 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+document.addEventListener("DOMContentLoaded", function(event) { 
+	function moveCurrentMaker() {
+		document.querySelectorAll('.stats>.stat').forEach(function (stat) {
+	  		var marker = stat.querySelector('.current-marker');
+			var bar = stat.querySelector('.bar-inner');
+
+			marker.style.left = marker.dataset.position;
+			bar.style.width = bar.dataset.width;
+			
+		})
+	}
+	setTimeout(moveCurrentMaker, 20);
+});

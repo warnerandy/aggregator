@@ -91,11 +91,6 @@ defmodule AggRagerWeb.Coherence.RegistrationController do
       |> Enum.map(fn (ladder) -> ladder["ladderId"] end)
       |> Enum.map(fn (ladderId) -> SC2.get_ladder(get_session(conn, :auth_client),ladderId) end)
 
-    # user_response = get_session(conn, :auth_client)
-    #   |> SC2.get_user_data()
-
-    # Logger.info inspect user_response
-
     user = Map.merge(Coherence.current_user(conn), %{"profile" => user_response, "ladders" => api_ladder_response})
 
 

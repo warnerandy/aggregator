@@ -8,13 +8,18 @@ ul.record {
 	align-items: center;
 	
 	padding: 8px 16px;
+	&.natural {
+		li {
+			width auto;
+		}
+	}
 	li {
 		font-size:16px;
 		text-align: center;
 		width:75px;
 		border-radius: 8px;
 		margin:0 16px;
-		.stat {
+		.value {
 			font-size: 24px;
 			border-bottom: 2px solid blizzBlueBorder;
 			margin-bottom:10px;
@@ -33,29 +38,87 @@ ul.record {
 	justify-content space-between;
 	flex-wrap wrap;
 	.stat {
-		padding 8px;
-		display: inline-block;
-		border: 1px solid blizzBlueBorder;
+		h2 {
+			margin-left: 34px
+		}
 		background-color blizzGrey;
-		width:calc(50% - 8px);
-		margin-bottom:16px;
+		padding: 8px;
+	    display: inline-block;
+	    border-image: url("/images/sc2 border.svg") 20% 10% fill stretch;
+	    border-image-width: 200px;
+	    border-image-outset: 14px 22px;
+	    width: calc(50% - 8px);
+	    margin: 14px 24px;
+	    margin-bottom: 40px;
+	    min-height 155px;
+		&.full-width {
+			width: 100%;
+		}
+	}
+}
+.col-2 {
+	.stats {
+		.stat {
+			&.full-width {
+				width: calc(100% - 50px);
+			}
+		}
 	}
 }
 
-.stat-block {
-	background-color blizzGrey;
-	border: 1px solid blizzBlueBorder;
-	margin-bottom:16px;
-	&:hover {
-		background-color lighten(blizzGrey, 5%);
-		transition .2s background-color;
+// .stat-block {
+// 	background-color blizzGrey;
+// 	border: 1px solid blizzBlueBorder;
+// 	margin-bottom:16px;
+// 	&:hover {
+// 		background-color lighten(blizzGrey, 5%);
+// 		transition .2s background-color;
+// 	}
+// 	h3 {
+// 		padding: 8px 16px;
+// 		margin:0;
+// 		font-weight normal;
+// 	}
+// 	ul {
+// 		padding:16px;
+// 	}
+// }
+
+div.ladder-stats {
+	display flex;
+	justify-content space-around;
+	.stat {
+		border:none;
+		min-width:20%;
+		padding: 0 40px;
+		.label {
+			font-size 24px;
+			border-bottom: 5px solid blizzBlueBorder;
+		}
+		.value {
+			text-align:center;
+			font-size 36px;
+		}
+	}	
+}
+
+.race-logo {
+	height: 45px;
+	vertical-align middle;
+	margin-right 15px;
+	margin-left:33px;
+	&.Zerg {
+		fill: zergPurple;
+		color: zergPurple;
 	}
-	h3 {
-		padding: 8px 16px;
-		margin:0;
-		font-weight normal;
+	&.Terran {
+		fill: terranRed;
+		stroke: darken(terranRed, 50%);
+		stroke-width: 1px;
 	}
-	ul {
-		padding:16px;
+	&.Protoss {
+		fill: tossGold;
+		stroke: blizzBtnBlue;
+		stroke-width: 10px;
 	}
 }
